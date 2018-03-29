@@ -8,6 +8,7 @@ export default class Hello extends Component {
     this.state = {};
   };
   componentDidMount() {
+  debugger
   }
   render() {
     return(
