@@ -66,7 +66,7 @@ export function authGithub() {
 
 export function requestGithubToken( options, code ) {
   return function( dispatch ) {
-    fetch( 'https://github.com/login/oauth/access_token', {
+    return fetch( 'https://github.com/login/oauth/access_token', {
       method: 'POST',
       body: JSON.stringify(
         {
@@ -75,14 +75,16 @@ export function requestGithubToken( options, code ) {
           code: code
         }
       ),
-      headers: { 'Content-Type': 'application/json' }
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+        }
     } )
     .then( response => response.json() )
     .then( response => {
-      console.log( response );
-      debugger
       dispatch( logIn( response ) );
     } )
+    .catch( error => { console.log( 'request failed', error ); } );
   }
 };
 
@@ -93,3 +95,9 @@ export function logIn( response ) {
   }
 }
 
+// export function getUserInfo( token ) {
+//   return function( dispatch ) {
+//     return fetch()
+//
+//   }
+// }

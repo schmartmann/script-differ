@@ -5,19 +5,22 @@ export default class Hello extends Component {
   constructor() {
     super();
 
-    this.state = {};
+    this.state = { loggedIn: false };
+    this.loggedIn = this.loggedIn.bind( this );
   };
-  componentDidMount() {
-  debugger
+  componentWillReceiveProps( nextProps ) {
+    this.setState( { loggedIn: nextProps.auth.loggedIn } )
+  }
+  loggedIn() {
+    return this.state.loggedIn ?
+      ( <p>You made it</p> ) :
+      ( <p  onClick={ this.props.authGithub }>get nice and logged in</p> )
   }
   render() {
     return(
       <div>
         <h1> howdy friendo</h1>
-        <p  onClick={ this.props.authGithub }>get nice and logged in</p>
-        <Link to="/counter">
-          <p>counter</p>
-        </Link>
+        { this.loggedIn() }
       </div>
     )
   }
