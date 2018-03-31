@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import Repo from './Repo';
+import Branch from './Branch';
 
 export default class Repos extends Component {
   reposList() {
@@ -15,13 +17,13 @@ export default class Repos extends Component {
     if ( !currentRepo ) {
       return repos.map( repo => {
         return(
-          <li key={ repo.id } onClick={ fetchRepoBranches.bind( this, login, repo.name ) }>{ repo.name }</li>
+          <Repo repo={ repo } fetchRepoBranches={ fetchRepoBranches }/>
         )
       } )
     } else {
       return this.props.repos.currentRepoBranches.map( branch => {
         return (
-          <li key={ branch.commit.sha }>{ branch.name }</li>
+          <Branch branch={ branch }/>
         )
       })
     }
