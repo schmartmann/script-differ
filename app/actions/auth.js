@@ -23,8 +23,8 @@ export function authGithub() {
 
     return function( dispatch ) {
       var options = {
-        client_id: 'bf003d7cffb2f78ec8a4',
-        client_secret: 'f6c6d946e272684219a8487e4cbacfdf93545ab3',
+        client_id: process.env.REACT_APP_CLIENT_ID,
+        client_secret: process.env.REACT_APP_CLIENT_SECRET,
         scopes: [ "read:user", "repo" ]
       };
 
