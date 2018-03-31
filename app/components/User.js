@@ -19,9 +19,6 @@ export default class User extends Component {
       this.props.history.push( '/auth' )
     }
   };
-  componentWillReceiveProps( nextProps ) {
-    console.log( nextProps )
-  }
   renderUserData() {
     return this.props.user.login ?
     ( <UserData user={ this.props.user } repos={ this.props.repos }/> ) :

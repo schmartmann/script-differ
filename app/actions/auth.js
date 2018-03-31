@@ -37,7 +37,6 @@ export function authGithub() {
         }
       } )
 
-
       var githubUrl = 'https://github.com/login/oauth/authorize?';
       var authUrl = githubUrl + 'client_id=' + options.client_id + '&scope=' + options.scopes;
 
