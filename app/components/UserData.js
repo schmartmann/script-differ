@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import Repos from './Repos';
 
 export default class UserData extends Component {
@@ -9,7 +10,7 @@ export default class UserData extends Component {
         <h1>Welcome, { login }</h1>
         <img src={ avatarUrl }/>
         <p>Public Repos: { publicRepos }</p>
-        <Repos repos={ this.props.repos }/>
+        <Link to="/repos">View your Repositories</Link>
       </div>
     )
   }

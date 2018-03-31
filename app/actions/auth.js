@@ -125,15 +125,15 @@ export function fetchUserInfo( token ) {
     .then( response => response.json() )
     .then( response => {
       dispatch( setUserInfo( response ) );
-      dispatch( fetchUserRepos( token ) );
+      dispatch( fetchUserRepos( token, response.login ) );
     } )
     .catch( error => { console.log( 'request failed', error ); } );
   }
 };
 
-export function fetchUserRepos( token ) {
+export function fetchUserRepos( token, login ) {
   return function( dispatch ) {
-    return fetch( `${ GITHUB_API_URL}user/repos`, {
+    return fetch( `${ GITHUB_API_URL}users/${ login }/repos`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
