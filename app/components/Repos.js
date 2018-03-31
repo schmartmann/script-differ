@@ -5,8 +5,8 @@ import Branch from './Branch';
 
 export default class Repos extends Component {
   reposList() {
-    var repos = this.props.repos.repos;
-    var currentRepo = this.props.repos.currentRepo;
+    var repos = this.props.repo.repos;
+    var currentRepo = this.props.repo.currentRepo;
     const { login } = this.props.user;
     const { fetchRepoBranches } = this.props;
 
@@ -21,7 +21,7 @@ export default class Repos extends Component {
         )
       } )
     } else {
-      return this.props.repos.currentRepoBranches.map( branch => {
+      return this.props.repo.currentRepoBranches.map( branch => {
         return (
           <Branch branch={ branch }/>
         )
@@ -29,7 +29,7 @@ export default class Repos extends Component {
     }
   }
   header() {
-    var currentRepo = this.props.repos.currentRepo;
+    var currentRepo = this.props.repo.currentRepo;
     const { login } = this.props.user;
 
     return currentRepo ?
@@ -37,7 +37,7 @@ export default class Repos extends Component {
     ( <h1>Viewing { login }'s Repositories</h1> )
   }
   footer() {
-    var currentRepo = this.props.repos.currentRepo;
+    var currentRepo = this.props.repo.currentRepo;
     const { setCurrentRepo } = this.props;
 
     return currentRepo ?

@@ -21,7 +21,7 @@ export default class User extends Component {
   };
   renderUserData() {
     return this.props.user.login ?
-    ( <UserData user={ this.props.user } repos={ this.props.repos }/> ) :
+    ( <UserData user={ this.props.user } repos={ this.props.repo }/> ) :
     ( <p>Not yet logged in</p>)
   }
   render() {
