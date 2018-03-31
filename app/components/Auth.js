@@ -1,11 +1,14 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 
-export default class Hello extends Component {
+export default class Auth extends Component {
   constructor() {
     super();
 
-    this.state = { loggedIn: false };
+    this.state = {
+      loggedIn: false,
+    };
+
     this.loggedIn = this.loggedIn.bind( this );
   };
   componentWillReceiveProps( nextProps ) {
@@ -13,7 +16,7 @@ export default class Hello extends Component {
   }
   loggedIn() {
     return this.state.loggedIn ?
-      ( <p>You made it</p> ) :
+      ( <Link to="/user">You made it</Link> ) :
       ( <p  onClick={ this.props.authGithub }>get nice and logged in</p> )
   }
   render() {

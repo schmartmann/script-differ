@@ -6,61 +6,75 @@ const dialog = remote.dialog;
 
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import { browserHistory } from 'react-router';
+
+const GITHUB_API_URL = 'https://api.github.com/'
 
 export function authGithub() {
-  return function( dispatch ) {
-    var options = {
-      client_id: 'bf003d7cffb2f78ec8a4',
-      client_secret: 'f6c6d946e272684219a8487e4cbacfdf93545ab3',
-      scopes: [ "read:user", "repo" ]
-    };
+  var localToken = findToken();
 
-    var authWindow = new BrowserWindow( {
-      width: 800,
-      height: 600,
-      show: true,
-      webPreferences: {
-        nodeIntegration: false
-      }
-    } )
+  if ( localToken ){
 
-
-    var githubUrl = 'https://github.com/login/oauth/authorize?';
-    var authUrl = githubUrl + 'client_id=' + options.client_id + '&scope=' + options.scopes;
-
-    authWindow.loadURL( authUrl )
-
-    function handleCallback( url ) {
-      var rawCode = /code=([^&]*)/.exec( url ) || null,
-          code = ( rawCode && rawCode.length > 1 ) ? rawCode[ 1 ] : null,
-          error = /\?error=(.+)&/.exec( url );
-
-      if ( code ||  error ) {
-        // close BrowserWindow if code found or error
-        authWindow.destroy();
-      }
-
-      // If there is a code, get token from GitHub
-      if ( code ) {
-        dispatch( requestGithubToken( options, code ) )
-      } else if ( error ) {
-        alert( 'Oops! Something went wrong and we couldn\'t' +
-          'log you in using GitHub. Please try again.'
-        );
-      }
+    return function( dispatch ) {
+      dispatch( logIn( localToken ) );
+      dispatch( fetchUserInfo( localToken ) );
     }
+  } else {
 
-    authWindow.webContents.on( 'will-navigate', function( event, url ) {
-      handleCallback( url, options );
-    } )
+    return function( dispatch ) {
+      var options = {
+        client_id: 'bf003d7cffb2f78ec8a4',
+        client_secret: 'f6c6d946e272684219a8487e4cbacfdf93545ab3',
+        scopes: [ "read:user", "repo" ]
+      };
 
-    authWindow.webContents.on( 'did-get-redirect-request', function( event, oldUrl, newUrl ) {
-      handleCallback( newUrl, options );
-    } )
+      var authWindow = new BrowserWindow( {
+        width: 800,
+        height: 600,
+        show: true,
+        webPreferences: {
+          nodeIntegration: false
+        }
+      } )
 
-    authWindow.on( 'close', function() {
-      authWindow = null;
-    }, false )
+
+      var githubUrl = 'https://github.com/login/oauth/authorize?';
+      var authUrl = githubUrl + 'client_id=' + options.client_id + '&scope=' + options.scopes;
+
+      authWindow.loadURL( authUrl )
+
+      function handleCallback( url ) {
+        var rawCode = /code=([^&]*)/.exec( url ) || null,
+            code = ( rawCode && rawCode.length > 1 ) ? rawCode[ 1 ] : null,
+            error = /\?error=(.+)&/.exec( url );
+
+        if ( code ||  error ) {
+          // close BrowserWindow if code found or error
+          authWindow.destroy();
+        }
+
+        // If there is a code, get token from GitHub
+        if ( code ) {
+          dispatch( requestGithubToken( options, code ) )
+        } else if ( error ) {
+          alert( 'Oops! Something went wrong and we couldn\'t' +
+            'log you in using GitHub. Please try again.'
+          );
+        }
+      }
+
+      authWindow.webContents.on( 'will-navigate', function( event, url ) {
+        handleCallback( url, options );
+      } )
+
+      authWindow.webContents.on( 'did-get-redirect-request', function( event, oldUrl, newUrl ) {
+        handleCallback( newUrl, options );
+      } )
+
+      authWindow.on( 'close', function() {
+        authWindow = null;
+      }, false )
+    }
   }
 };
 
@@ -82,12 +96,59 @@ export function requestGithubToken( options, code ) {
     } )
     .then( response => response.json() )
     .then( response => {
+      setToken( response.access_token );
       dispatch( logIn( response ) );
+      dispatch( fetchUserInfo( response.access_token ) );
     } )
     .catch( error => { console.log( 'request failed', error ); } );
   }
 };
 
+function findToken() {
+  var localToken = localStorage.getItem( 'githubToken' ) || null;
+  return localToken;
+}
+
+function setToken( token ) {
+  var localToken = localStorage.setItem( 'githubToken', token );
+}
+
+export function fetchUserInfo( token ) {
+  return function( dispatch ) {
+    return fetch( `${ GITHUB_API_URL }user`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${ token }`
+        }
+    } )
+    .then( response => response.json() )
+    .then( response => {
+      dispatch( setUserInfo( response ) );
+      dispatch( fetchUserRepos( token ) );
+    } )
+    .catch( error => { console.log( 'request failed', error ); } );
+  }
+};
+
+export function fetchUserRepos( token ) {
+  return function( dispatch ) {
+    return fetch( `${ GITHUB_API_URL}user/repos`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${ token }`
+      }
+    } )
+    .then( response => response.json() )
+    .then( response => {
+      dispatch( setUserRepos( response ) );
+    } )
+    .catch( error => { console.log( 'request failed', error ); } );
+  }
+}
+
+//REDUCER ACTIONS
 export function logIn( response ) {
   return {
     type: 'LOG_IN',
@@ -95,9 +156,16 @@ export function logIn( response ) {
   }
 }
 
-// export function getUserInfo( token ) {
-//   return function( dispatch ) {
-//     return fetch()
-//
-//   }
-// }
+export function setUserInfo( response ) {
+  return {
+    type: 'SET_USER_INFO',
+    data: response
+  }
+}
+
+export function setUserRepos( response ) {
+  return {
+    type: 'SET_USER_REPOS',
+    data: response
+  }
+}

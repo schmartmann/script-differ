@@ -1,5 +1,4 @@
 const DEFAULT_STATE = {
-  user: null,
   token: null,
   loggedIn: false
 }
