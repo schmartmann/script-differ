@@ -12,7 +12,7 @@ export function authGithub() {
     var options = {
       client_id: 'bf003d7cffb2f78ec8a4',
       client_secret: 'f6c6d946e272684219a8487e4cbacfdf93545ab3',
-      scopes: [ "user:email", "notifications" ]
+      scopes: [ "read:user", "repo" ]
     };
 
     var authWindow = new BrowserWindow( {
