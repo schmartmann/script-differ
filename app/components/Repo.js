@@ -5,24 +5,12 @@ export default class Repo extends Component {
     const { fetchRepoBranches } = this.props;
     const { repo } = this.props;
     return(
-      <div>
-        <ul key={ repo.id }>
-          <li>
-            <strong>{ repo.name }</strong>
-          </li>
-
-          <li>
-            Description: { repo.description }
-          </li>
-
-          <li>
-            Default Branch: { repo.default_branch }
-          </li>
-          <li onClick={ fetchRepoBranches.bind( this, repo.owner.login, repo.name ) }>
-            View Branches
-          </li>
-        </ul>
-      </div>
+      <li key={ repo.id } onClick={ fetchRepoBranches.bind( this, repo.owner.login, repo.name ) }>
+        <strong>{ repo.name }</strong><br/>
+        { repo.description ? ( `Description: ${ repo.description }` ) : null }
+        Default Branch: { repo.default_branch }<br/>
+        <i>View Branches</i>
+      </li>
     )
   }
 }

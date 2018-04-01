@@ -17,7 +17,7 @@ export default class Repos extends Component {
     if ( !currentRepo ) {
       return repos.map( repo => {
         return(
-          <Repo repo={ repo } fetchRepoBranches={ fetchRepoBranches }/>
+          <Repo key={ repo.id } repo={ repo } fetchRepoBranches={ fetchRepoBranches }/>
         )
       } )
     } else {
