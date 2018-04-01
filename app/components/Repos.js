@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import { ListView, ListViewHeader, ListViewFooter,
+        Text, ListViewSeparator } from 'react-desktop/macOs'
 import Repo from './Repo';
 import Branch from './Branch';
 
@@ -21,37 +23,44 @@ export default class Repos extends Component {
         )
       } )
     } else {
+      var repo = repos.find( repo => repo.name === currentRepo );
       return this.props.repo.currentRepoBranches.map( branch => {
         return (
-          <Branch branch={ branch }/>
+          <Branch key={ branch.commit.sha } branch={ branch } repo={ repo }/>
         )
       })
     }
   }
-  header() {
+  headerText() {
     var currentRepo = this.props.repo.currentRepo;
     const { login } = this.props.user;
 
     return currentRepo ?
-    ( <h1> Viewing branches for { currentRepo }</h1> ) :
-    ( <h1>Viewing { login }'s Repositories</h1> )
+    ( <Text>{ login }/{ currentRepo }</Text> ) :
+    ( <Text>{ login }</Text> )
   }
-  footer() {
+  footerText() {
     var currentRepo = this.props.repo.currentRepo;
     const { setCurrentRepo } = this.props;
 
     return currentRepo ?
-    ( <p onClick={ setCurrentRepo.bind( this, null ) }>Back to repositories.</p> ) :
-    ( <Link to="/user" >Back to profile.</Link> )
+    ( <Text onClick={ setCurrentRepo.bind( this, null ) }>Back to repositories.</Text> ) :
+    ( <Text>
+        <Link to="/user" >Back to profile.</Link>
+      </Text> )
   }
   render() {
     return(
       <div>
-        { this.header() }
-        <ul>
-          { this.reposList() }
-        </ul>
-        { this.footer() }
+        <ListView background="#f1f2f4">
+          <ListViewHeader>
+            { this.headerText() }
+          </ListViewHeader>
+            { this.reposList() }
+          <ListViewFooter>
+            { this.footerText() }
+          </ListViewFooter>
+        </ListView>
       </div>
     )
   }

@@ -1,10 +1,23 @@
 import React, { Component } from 'react';
+import { ListViewSection, ListViewRow, Text } from 'react-desktop/macOs';
 
 export default class Branch extends Component {
   render() {
-    const { branch } = this.props;
+    const { branch, repo } = this.props;
+    console.log( this.props )
     return(
-      <li key={ branch.commit.sha }>{ branch.name }</li>
+        <ListViewSection header={ branch.name }>
+          <ListViewRow>
+            <Text>
+              Last commit: { branch.commit.sha }
+            </Text>
+          </ListViewRow>
+          <ListViewRow>
+            <Text>
+              Compare to <strong>{ repo.default_branch }</strong>
+            </Text>
+          </ListViewRow>
+        </ListViewSection>
     )
   }
 }

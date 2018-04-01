@@ -1,16 +1,14 @@
 import React, { Component } from 'react';
+import { ListViewRow, Text } from 'react-desktop/macOs';
 
 export default class Repo extends Component {
   render() {
     const { fetchRepoBranches } = this.props;
     const { repo } = this.props;
     return(
-      <li key={ repo.id } onClick={ fetchRepoBranches.bind( this, repo.owner.login, repo.name ) }>
-        <strong>{ repo.name }</strong><br/>
-        { repo.description ? ( `Description: ${ repo.description }` ) : null }
-        Default Branch: { repo.default_branch }<br/>
-        <i>View Branches</i>
-      </li>
+      <ListViewRow onClick={ fetchRepoBranches.bind( this, repo.owner.login, repo.name ) }>
+        <Text>{ repo.name }</Text>
+      </ListViewRow>
     )
   }
 }
