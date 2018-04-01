@@ -7889,6 +7889,10 @@ react-hot-loader@^4.0.0-beta.13:
     hoist-non-react-statics "^2.3.1"
     react-stand-in "^4.0.0-beta.18"
 
+react-photonkit@^0.4.1:
+  version "0.4.1"
+  resolved "https://registry.yarnpkg.com/react-photonkit/-/react-photonkit-0.4.1.tgz#84ed6248e03031e742070ac0c68de8af3f6e3b1c"
+
 react-proxy@^1.1.7:
   version "1.1.8"
   resolved "https://registry.yarnpkg.com/react-proxy/-/react-proxy-1.1.8.tgz#9dbfd9d927528c3aa9f444e4558c37830ab8c26a"
