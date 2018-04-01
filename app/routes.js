@@ -6,6 +6,17 @@ import HomePage from './containers/HomePage';
 import AuthPage from './containers/AuthPage';
 import UserPage from './containers/UserPage';
 import ReposPage from './containers/ReposPage';
+import { fetchUserInfo } from './actions/auth';
+
+function requireAuth() {
+  var token = localStorage.getItem( 'githubToken' ) || null;
+  if ( token ) {
+    fetchUserInfo( token )
+    this.props.history.push( '/user' )
+  } else {
+    this.props.history.push( '/auth' )
+  }
+}
 
 export default () => (
   <App>
@@ -13,7 +24,7 @@ export default () => (
       <Route path="/auth"    component={ AuthPage }/>
       <Route path="/user"    component={ UserPage }/>
       <Route path="/repos"   component={ ReposPage }/>
-      <Route path="/"        component={ HomePage } />
+      <Route path="/"        component={ HomePage } onEnter={ requireAuth }/>
     </Switch>
   </App>
 );
