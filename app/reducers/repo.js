@@ -3,7 +3,8 @@ const DEFAULT_STATE = {
   currentRepo: null,
   currentRepoBranches: [],
   currentBranch: null,
-  commits: []
+  commits: [],
+  diff: null
 }
 
 export default function repos( state = DEFAULT_STATE, action ) {
@@ -27,6 +28,11 @@ export default function repos( state = DEFAULT_STATE, action ) {
       return {
         ...state,
         currentBranch: action.data
+      }
+    case 'SET_CURRENT_DIFF':
+      return {
+        ...state,
+        diff: action.data
       }
     case 'SET_BRANCH_COMMITS':
       return {

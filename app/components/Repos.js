@@ -10,7 +10,7 @@ export default class Repos extends Component {
     var repos = this.props.repo.repos;
     var currentRepo = this.props.repo.currentRepo;
     const { login } = this.props.user;
-    const { fetchRepoBranches } = this.props;
+    const { fetchRepoBranches, compareDefaultBranch } = this.props;
 
     if ( !login ) {
       this.props.history.push( '/auth' )
@@ -26,7 +26,7 @@ export default class Repos extends Component {
       var repo = repos.find( repo => repo.name === currentRepo );
       return this.props.repo.currentRepoBranches.map( branch => {
         return (
-          <Branch key={ branch.commit.sha } branch={ branch } repo={ repo }/>
+          <Branch key={ branch.commit.sha } branch={ branch } repo={ repo } compareDefaultBranch={ compareDefaultBranch }/>
         )
       })
     }
